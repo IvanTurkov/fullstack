@@ -1,0 +1,8 @@
+FROM mysql:5.6
+
+MAINTAINER <grebenkin@phystech.edu>
+
+ENV MYSQL_ROOT_PASSWORD pass
+ENV MYSQL_USER docker
+ENV MYSQL_PASSWORD docker
+ENV MYSQL_DATABASE api

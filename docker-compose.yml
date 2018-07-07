@@ -1,0 +1,79 @@
+#----------------------------------------#
+version: '2'
+#----------------------------------------#
+services:
+#----------------------------------------#
+    nginx:
+        container_name: nginx
+        image: cubazis/nginx:fullstack
+        ports:
+            - "8000:8000"
+            - "8001:8001"
+            - "9000:9000"
+            - "443:443"
+        volumes:
+            - ./nginx:/etc/nginx/conf.d
+            - ./logs:/var/log/nginx
+            - ./www/frontend/stub:/var/www/frontend/stub
+            - ./www/frontend/build:/var/www/frontend/build
+        volumes_from:
+            - php
+        depends_on:
+            - php
+        networks:
+            fullstack:
+                aliases:
+                   - nginx
+
+#----------------------------------------#
+    php:
+        container_name: php
+        image: cubazis/php:fullstack
+        volumes:
+            - ./www/backdoor:/var/www/backdoor
+            - ./www/app:/var/www/app
+        depends_on:
+            - postgres
+            - mysql
+        networks:
+            fullstack:
+                aliases:
+                    - php
+#----------------------------------------#
+    postgres:
+        container_name: postgres
+        image: cubazis/postgres:fullstack
+        ports:
+           - "5432:5432"
+        volumes:
+           - ./db/postgres:/var/lib/postgresql/data
+           - ./db/scripts/postgres:/docker-entrypoint-initdb.d
+        networks:
+            fullstack:
+                aliases:
+                    - postgres
+#----------------------------------------#
+    mysql:
+        container_name: mysql
+        image: cubazis/mysql:fullstack
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./db/mysql:/var/lib/mysql
+            - ./db/scripts/mysql:/docker-entrypoint-initdb.d
+        networks:
+            fullstack:
+                aliases:
+                    - mysql
+#----------------------------------------#
+    react:
+        image: cubazis/react:fullstack
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./www/frontend:/client
+#----------------------------------------#
+
+networks:
+    fullstack:
+        driver: bridge

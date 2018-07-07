@@ -1,0 +1,26 @@
+#----------------------------------------#
+version: '2'
+#----------------------------------------#
+services:
+#----------------------------------------#
+    nginx:
+        container_name: nginx
+        build: ./images/nginx
+#----------------------------------------#
+    php:
+        container_name: php
+        build: ./images/php
+#----------------------------------------#
+    postgres:
+        container_name: postgres
+        build: ./images/postgres
+#----------------------------------------#
+    mysql:
+        container_name: mysql
+        build: ./images/mysql
+#----------------------------------------#
+    react:
+        container_name: react
+        build:
+            context: ./www/frontend
+#----------------------------------------#
